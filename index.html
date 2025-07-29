@@ -27,7 +27,7 @@
       border-radius: 20px;
       padding: 30px;
       width: 100%;
-      max-width: 900px;
+      max-width: 1200px;
       box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
       backdrop-filter: blur(10px);
       margin-top: 100px;
@@ -46,7 +46,7 @@
       margin-right: 10px;
     }
 
-    select {
+    select, input {
       padding: 8px 12px;
       border-radius: 6px;
       border: none;
@@ -162,7 +162,8 @@
         <option value="Lahore">Lahore</option>
         <option value="Karachi">Karachi</option>
       </select>
-
+      <input type="date" id="departure">
+      <input type="date" id="arrival">
       <button onclick="filterFlights()">Search Flights</button>
     </div>
 
@@ -183,17 +184,20 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
     const flights = [
-      { flight: "PK101", from: "Karachi", to: "Dubai", departure: "2025-08-01", arrival: "2025-08-01" },
-      { flight: "PK102", from: "Lahore", to: "Dubai", departure: "2025-08-01", arrival: "2025-08-01" },
-      { flight: "PK103", from: "Islamabad", to: "Karachi", departure: "2025-08-01", arrival: "2025-08-01" },
-      { flight: "PK104", from: "Karachi", to: "Lahore", departure: "2025-08-01", arrival: "2025-08-01" },
+      { flight: "PK101", from: "Karachi", to: "Dubai", departure: "2025-08-01", arrival: "2025-08-10" },
+      { flight: "PK102", from: "Lahore", to: "Dubai", departure: "2025-08-15", arrival: "2025-08-25" },
+      { flight: "PK103", from: "Islamabad", to: "Karachi", departure: "2025-08-20", arrival: "2025-08-22" },
+      { flight: "PK104", from: "Karachi", to: "Lahore", departure: "2025-08-16", arrival: "2025-08-18" },
     ];
 
     function filterFlights() {
       const from = document.getElementById('from').value;
       const to = document.getElementById('to').value;
-      const filtered = flights.filter(flight => flight.from === from && flight.to === to);
+      const departure = document.getElementById('departure').value;
+      const arrival = document.getElementById('arrival').value;
+      const filtered = flights.filter(flight => flight.from === from && flight.to === to && flight.departure === departure && flight.arrival === arrival);
       displayFlights(filtered);
+
     }
 
     function displayFlights(flightSystem) {
