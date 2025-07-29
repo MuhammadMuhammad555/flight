@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AeroNest Flight System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 20px;
+    }
+
+    .layout {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 30px;
+      width: 100%;
+      max-width: 900px;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      margin-top: 100px;
+    }
+
+    .logo img {
+      width: 150px;
+      display: block;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      border: 3px solid #fff;
+    }
+
+    label {
+      font-weight: 600;
+      margin-right: 10px;
+    }
+
+    select {
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: none;
+      margin: 10px 0;
+      min-width: 140px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #154961;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      margin-left: 10px;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #000000;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 30px;
+      border-collapse: collapse;
+      background-color: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      border: 1px solid black;
+      flex-shrink: 0;
+      position: sticky;
+    }
+
+    th, td {
+      padding: 14px 12px;
+      border-bottom: 1px solid rgba(226, 0, 0, 0.2);
+      color: black;
+    }
+
+    th {
+      animation: rotate 6s linear infinite;
+    }
+
+    @keyframes rotate {
+      0% { background: #4FC3F7; }
+      50% { background: #0288D1; }
+      100% { background: #4FC3F7; }
+    }
+
+    tr:hover {
+      background-color: rgba(255, 255, 255, 0.08);
+    }
+  @media (max-width: 768px) {
+      .layout {
+        padding: 20px;
+      }
+
+      table {
+        font-size: 14px;
+      }
+
+      .controls {
+        flex-direction: column;
+      }
+
+      select, button {
+        width: 100%;
+        margin: 5px 0;
+      }
+    }
+
+  @media (max-width: 480px) {
+    select, button {
+      width: 100%;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+  }
+  @media only screen and (max-width: 400px) {
+     table{
+      font-size: 9px;
+
+    }
+  }
+</style>
+
+</head>
+<body>
+
+  <div class="layout">
+    <div class="logo">
+      <img src="images7/Aero nest.png" alt="AeroNest Logo">
+    </div>
+
+    <div style="text-align: center;">
+      <label for="from">From</label>
+      <select id="from">
+        <option value="">Select</option>
+        <option value="Karachi">Karachi</option>
+        <option value="Lahore">Lahore</option>
+        <option value="Islamabad">Islamabad</option>
+      </select>
+
+      <label for="to">To:</label>
+      <select id="to">
+        <option value="">Select</option>
+        <option value="Dubai">Dubai</option>
+        <option value="Lahore">Lahore</option>
+        <option value="Karachi">Karachi</option>
+      </select>
+
+      <button onclick="filterFlights()">Search Flights</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Flight</th>
+          <th>From</th>
+          <th>To</th>
+          <th>Departure</th>
+          <th>Arrival</th>
+        </tr>
+      </thead>
+      <tbody id="flightTableBody"></tbody>
+    </table>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    const flights = [
+      { flight: "PK101", from: "Karachi", to: "Dubai", departure: "2025-08-01", arrival: "2025-08-01" },
+      { flight: "PK102", from: "Lahore", to: "Dubai", departure: "2025-08-01", arrival: "2025-08-01" },
+      { flight: "PK103", from: "Islamabad", to: "Karachi", departure: "2025-08-01", arrival: "2025-08-01" },
+      { flight: "PK104", from: "Karachi", to: "Lahore", departure: "2025-08-01", arrival: "2025-08-01" },
+    ];
+
+    function filterFlights() {
+      const from = document.getElementById('from').value;
+      const to = document.getElementById('to').value;
+      const filtered = flights.filter(flight => flight.from === from && flight.to === to);
+      displayFlights(filtered);
+    }
+
+    function displayFlights(flightSystem) {
+      const tbody = document.getElementById('flightTableBody');
+      tbody.innerHTML = "";
+
+      if (flightSystem.length === 0) {
+        Swal.fire({
+          icon: "error",
+          title: "No Flights Found",
+          text: "There are no flights available for this route.",
+        });
+        return;
+      }
+
+      flightSystem.forEach(flight => {
+        const row = `
+          <tr>
+            <td>${flight.flight}</td>
+            <td>${flight.from}</td>
+            <td>${flight.to}</td>
+            <td>${flight.departure}</td>
+            <td>${flight.arrival}</td>
+          </tr>
+        `;
+        tbody.innerHTML += row;
+      });
+    }
+  </script>
+</body>
+</html>
